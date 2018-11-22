@@ -1,0 +1,19 @@
+session_name: robot
+windows:
+- window_name: robot window
+  layout: main-vertical
+  shell_command_before:
+  - cd ~/                    # run as a first command in all panes
+  panes:
+  - shell_command:           # pane no. 1
+    - sleep 3
+    - robot -L TRACE --debugfile ~/robot-debug.log /home/anton/IdeaProjects/robotrunner/test.robot        # run multiple commands in this pane
+    - rm ~/robot-debug.log
+    - kill "$(pgrep tail)"  #"$(< /tmp/my-app.pid)"
+    - pgrep tail
+  - shell_command:           # pane no. 1
+    - rm /tmp/my-app.pid
+    - touch ~/robot-debug.log
+    - tail -f ~/robot-debug.log   #& echo $! >>/tmp/my-app.pid        # pane no. 2
+    - exit
+
