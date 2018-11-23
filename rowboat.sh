@@ -2,8 +2,9 @@
 
 
 
-rowboat_test() {    cd ~/rowboatexecutions/
-                    ls -t | tail -n +6 | xargs rm -rf --
+rowboat_test() {    mkdir -p ~/rowboatexecutions/
+                    cd ~/rowboatexecutions/
+                    ls -d -1 ~/rowboatexecutions/** | tail -n +6 | xargs rm -rf --
                     export ROBOT_TMUXP_ARGS=$@
                     export ROWBOAT_EXEC_DIR=~/rowboatexecutions/$(date +"%Y-%m-%d-%H%M%S")
                 mkdir -p ${ROWBOAT_EXEC_DIR}
