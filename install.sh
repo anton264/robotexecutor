@@ -2,4 +2,4 @@
 
 pip install tmuxp
 mkdir -p ~/.tmuxp/
-cp rowboat.yaml ~/.tmuxp/
+cp $(dirname "$0")/rowboat.yaml ~/.tmuxp/
