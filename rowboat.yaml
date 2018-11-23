@@ -1,0 +1,20 @@
+session_name: Rowboat executor
+windows:
+- window_name: rowboat window
+  layout: main-vertical
+  shell_command_before:
+  - cd ${ROWBOAT_EXEC_DIR}                    # run as a first command in all panes
+  panes:
+  - shell_command:           # pane no. 1
+    - touch ${ROWBOAT_EXEC_DIR}/robotstdout.log & sleep 3
+    - tail -f ${ROWBOAT_EXEC_DIR}/robotstdout.log | awk '
+      /PASS/ {print "\033[32m" $0 "\033[39m"; next }1 {print}
+      /FAIL/ {print "\033[31m" $0 "\033[39m"}
+      ' & echo ''
+    - robot -L DEBUG -A /home/${USER}/sys2_arg_file --debugfile ${ROWBOAT_EXEC_DIR}/robot-debug.log ${ROBOT_TMUXP_ARGS} &>>${ROWBOAT_EXEC_DIR}/robotstdout.log
+    - kill $(pgrep tail)  #"$(< /tmp/my-app.pid)"
+    - exit
+  - shell_command:
+    - touch ${ROWBOAT_EXEC_DIR}/robot-debug.log
+    - tail -f ${ROWBOAT_EXEC_DIR}/robot-debug.log
+    - exit

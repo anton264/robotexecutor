@@ -2,9 +2,13 @@
 
 
 
-rowboat_test() {      export ROBOT_TMUXP_ARGS=$@
-                 tmuxp load /home/e603419/kodrepos/robotexecutor/robot.yaml
-		  cat /tmp/outfile | awk '
+rowboat_test() {    cd ~/rowboatexecutions/
+                    ls -t | tail -n +6 | xargs rm -rf --
+                    export ROBOT_TMUXP_ARGS=$@
+                    export ROWBOAT_EXEC_DIR=~/rowboatexecutions/$(date +"%Y-%m-%d-%H%M%S")
+                mkdir -p ${ROWBOAT_EXEC_DIR}
+                 tmuxp load rowboat
+		  cat /${ROWBOAT_EXEC_DIR}/robotstdout.log | awk '
       /PASS/ {print "\033[32m" $0 "\033[39m"; next }1 {print}
       /FAIL/ {print "\033[31m" $0 "\033[39m"; next }
       '
@@ -12,7 +16,6 @@ rowboat_test() {      export ROBOT_TMUXP_ARGS=$@
                     echo    # (optional) move to a new line
 		    if [[ $REPLY =~ ^[Yy]$ ]]
                     then
-                        xdg-open file:///home/${USER}/log.html;
+                        xdg-open file://${ROWBOAT_EXEC_DIR}/log.html;
                     fi
-		    rm /tmp/outfile
                   }
