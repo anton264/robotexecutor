@@ -6,13 +6,16 @@ windows:
   - cd ~/                    # run as a first command in all panes
   panes:
   - shell_command:           # pane no. 1
-    - sleep 3
-    - robot -L TRACE --debugfile ~/robot-debug.log /home/anton/IdeaProjects/robotrunner/test.robot        # run multiple commands in this pane
+    - touch /tmp/outfile & sleep 3
+    - tail -f /tmp/outfile | awk '
+      /PASS/ {print "\033[32m" $0 "\033[39m"; next }1 {print}
+      /FAIL/ {print "\033[31m" $0 "\033[39m"}
+      ' & echo ''
+    - robot -L DEBUG -A /home/${USER}/sys2_arg_file --debugfile ~/robot-debug.log ${ROBOT_TMUXP_ARGS} &>>/tmp/outfile       # run multiple commands in this pane
     - rm ~/robot-debug.log
-    - kill "$(pgrep tail)"  #"$(< /tmp/my-app.pid)"
-    - pgrep tail
+    - kill $(pgrep tail)  #"$(< /tmp/my-app.pid)"
+    - exit
   - shell_command:           # pane no. 1
-    - rm /tmp/my-app.pid
     - touch ~/robot-debug.log
     - tail -f ~/robot-debug.log   #& echo $! >>/tmp/my-app.pid        # pane no. 2
     - exit
