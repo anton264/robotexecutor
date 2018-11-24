@@ -2,7 +2,7 @@
 
 
 
-rowboat_test() {    mkdir -p ~/rowboatexecutions/
+mkdir -p ~/rowboatexecutions/
                     cd ~/rowboatexecutions/
                     ls -d -1 ~/rowboatexecutions/** | tail -n +6 | xargs rm -rf --
                     export ROBOT_TMUXP_ARGS=$@
@@ -19,4 +19,3 @@ rowboat_test() {    mkdir -p ~/rowboatexecutions/
                     then
                         xdg-open file://${ROWBOAT_EXEC_DIR}/log.html;
                     fi
-                  }
