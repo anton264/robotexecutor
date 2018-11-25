@@ -1,6 +1,6 @@
 Rowboat - the Robot Framework executor
 --------
-
+![example image](https://github.com/anton264/rowboatExecutor/blob/master/example.png?raw=true)
 **What is rowboat**
 
 Rowboat is a custom execution mode for robot framework mostly
