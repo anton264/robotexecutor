@@ -11,10 +11,13 @@ windows:
       /PASS/ {print "\033[32m" $0 "\033[39m"; next }1 {print}
       /FAIL/ {print "\033[31m" $0 "\033[39m"}
       ' & echo ''
-    - robot -L DEBUG -A /home/${USER}/sys2_arg_file --debugfile ${ROWBOAT_EXEC_DIR}/robot-debug.log ${ROBOT_TMUXP_ARGS} &>>${ROWBOAT_EXEC_DIR}/robotstdout.log
+    - robot -L DEBUG --debugfile ${ROWBOAT_EXEC_DIR}/robot-debug.log ${ROBOT_TMUXP_ARGS} &>>${ROWBOAT_EXEC_DIR}/robotstdout.log
     - kill $(pgrep tail)  #"$(< /tmp/my-app.pid)"
     - exit
   - shell_command:
     - touch ${ROWBOAT_EXEC_DIR}/robot-debug.log
-    - tail -f ${ROWBOAT_EXEC_DIR}/robot-debug.log
+    - tmux last-pane
+    - tail -f ${ROWBOAT_EXEC_DIR}/robot-debug.log| awk '
+      /FAIL/ {print "\033[31m" $0 "\033[39m"; next }1 {print}
+      '
     - exit
